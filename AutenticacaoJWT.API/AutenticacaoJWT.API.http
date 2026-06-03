@@ -1,0 +1,27 @@
+@AutenticacaoJWT.API_HostAddress = https://localhost:7060
+@token = {{login.response.body.token}}
+
+### Cadastro
+# @name register
+POST {{AutenticacaoJWT.API_HostAddress}}/api/Login/register
+Content-Type: application/json
+
+{
+  "name": "Teste Usuario",
+  "email": "teste@email.com",
+  "password": "senha123"
+}
+
+### Login
+# @name login
+POST {{AutenticacaoJWT.API_HostAddress}}/api/Login/login
+Content-Type: application/json
+
+{
+  "email": "teste@email.com",
+  "password": "senha123"
+}
+
+### Listar usuários (autenticado)
+GET {{AutenticacaoJWT.API_HostAddress}}/api/User/Users?pageNumber=1&pageSize=10
+Authorization: Bearer {{token}}

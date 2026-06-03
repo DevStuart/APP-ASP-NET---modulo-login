@@ -1,0 +1,46 @@
+# Copyright (c) Elias Ferreira. Todos os direitos reservados.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: autenticacao-jwt-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: eliasfoda
+      POSTGRES_DB: AutenticacaoJWTDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: autenticacao-jwt-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__AutenticacaoJWTDB: Host=postgres;Port=5432;Username=postgres;Password=eliasfoda;Database=AutenticacaoJWTDB;
+      jwt__secretKey: docker-dev-secret-key-min-32-chars!!
+      jwt__issuer: localhost
+      jwt__audience: localhost
+      jwt__accessTokenMinutes: 30
+      jwt__refreshTokenDays: 7
+      LoginModule__SeedAdmin__Enabled: "true"
+      LoginModule__SeedAdmin__Email: admin@localhost.com
+      LoginModule__SeedAdmin__Password: Admin@123
+      LoginModule__SeedAdmin__Name: Administrador
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:

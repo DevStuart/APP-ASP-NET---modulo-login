@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Elias Ferreira</Authors>
+    <Company>Elias Ferreira</Company>
+    <Copyright>Copyright © Elias Ferreira. Todos os direitos reservados.</Copyright>
+    <Product>AutenticacaoJWT - Módulo de Login</Product>
+  </PropertyGroup>
+</Project>
